@@ -1,4 +1,4 @@
-package luca.carlino.chatapp.ui.theme
+package luca.carlino.chatapp.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
