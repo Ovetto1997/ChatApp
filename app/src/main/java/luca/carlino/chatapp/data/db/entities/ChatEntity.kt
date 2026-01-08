@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "chats", indices = [Index("id")])
 data class ChatEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    val id: Long,
 
     @ColumnInfo(name = "chat_name")
     val name: String,

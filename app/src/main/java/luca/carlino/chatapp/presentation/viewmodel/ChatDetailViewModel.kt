@@ -13,13 +13,19 @@ import luca.carlino.chatapp.domain.entities.Chat
 import luca.carlino.chatapp.domain.entities.Message
 import luca.carlino.chatapp.domain.repository.ChatRepository
 import luca.carlino.chatapp.domain.repository.MessageRepository
+import luca.carlino.chatapp.domain.usecases.GetChatByIdUseCase
+import luca.carlino.chatapp.domain.usecases.MarkMessagesAsReadUseCase
+import luca.carlino.chatapp.domain.usecases.ObserveMessageByChatIdUseCase
+import luca.carlino.chatapp.domain.usecases.SendMessageUseCase
 import luca.carlino.chatapp.presentation.uistate.ChatDetailUiState
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatDetailViewModel @Inject constructor(
-    private val chatRepository: ChatRepository,
-    private val messageRepository: MessageRepository,
+    private val getChatById: GetChatByIdUseCase,
+    private val observeMessagesByChatId: ObserveMessageByChatIdUseCase,
+    private val markMessagesAsRead: MarkMessagesAsReadUseCase,
+    private val sendMessageUseCase: SendMessageUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -44,10 +50,9 @@ class ChatDetailViewModel @Inject constructor(
 
     private fun loadMessages() {
         viewModelScope.launch {
-            messageRepository.getMessagesByChatId(chatId)
-                .collect { messageList ->
-                    messageList.also { _messages.value = it }
-                }
+            observeMessagesByChatId(chatId).collect {
+                _messages.value = it
+            }
         }
     }
 
@@ -55,12 +60,12 @@ class ChatDetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _uiState.value = ChatDetailUiState.Loading
-                val chat = chatRepository.getChatById(chatId)
+                val chat = getChatById(chatId)
                 _chat.value = chat
 
                 if (chat != null) {
                     _uiState.value = ChatDetailUiState.Success
-                    messageRepository.markMessagesAsRead(chatId)
+                    markMessagesAsRead(chatId)
                 } else {
 
                     _uiState.value = ChatDetailUiState.Error("Chat not Found")
@@ -72,7 +77,8 @@ class ChatDetailViewModel @Inject constructor(
         }
     }
     fun sendMessage() {
-        if (_newMessageText.value.isBlank() || chatId == (-1).toLong()) return
+        val text = _newMessageText.value
+        if (text.isBlank() || chatId == -1L) return
 //
         viewModelScope.launch {
             try {
@@ -86,10 +92,10 @@ class ChatDetailViewModel @Inject constructor(
 
                 )
 
-                messageRepository.insertMessage(message)
+                sendMessageUseCase(message)
 
                 // Update chat's last message
-                chatRepository.updateChatLastMessage(
+               updateChatLastMessage(
                     chatId = chatId,
                     lastMessage = message.text,
                     timestamp = message.timestamp

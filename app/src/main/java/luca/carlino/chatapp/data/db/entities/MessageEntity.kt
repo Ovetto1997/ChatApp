@@ -21,10 +21,10 @@ import androidx.room.PrimaryKey
 )
 data class MessageEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
 
     @ColumnInfo(name = "chat_id")
-    val chatId: Int,
+    val chatId: Long,
 
     @ColumnInfo(name = "sender_name")
     val senderName: String,

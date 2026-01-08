@@ -5,7 +5,7 @@ import luca.carlino.chatapp.data.db.entities.MessageEntity
 
 interface MessageLocalDataSource {
 
-    fun getMessagesByChatId(chatId: Int): Flow<List<MessageEntity>>
+    fun getMessagesByChatId(chatId: Long): Flow<List<MessageEntity>>
 
     suspend fun getUnreadMessages(chatId: Int): List<MessageEntity>
 
@@ -19,6 +19,6 @@ interface MessageLocalDataSource {
     suspend fun deleteMessage(message: MessageEntity)
 
 
-    suspend fun markMessagesAsRead(chatId: Int)
+    suspend fun markMessagesAsRead(chatId: Long)
 
 }

@@ -15,7 +15,7 @@ class ChatRepositoryImpl @Inject constructor (
     private val chatMapper: ChatMapper
 ) : ChatRepository {
 
-    override fun getAllChats(): Flow<List<Chat>> =
+    override fun getAllChats() =
         localDataSource.getAllChats().map { chatMapper.toDomainList(it) }
 
 

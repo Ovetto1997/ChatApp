@@ -12,10 +12,10 @@ class MessageLocalDataSourceImpl @Inject constructor(
 ) : MessageLocalDataSource{
 
 
-    override fun getMessagesByChatId(chatId: Int): Flow<List<MessageEntity>> =
+    override fun getMessagesByChatId(chatId: Long): Flow<List<MessageEntity>> =
         messageDao.getMessagesByChatId(chatId)
 
-    override suspend fun getUnreadMessages(chatId: Int): List<MessageEntity> =
+    override suspend fun getUnreadMessages(chatId: Long): List<MessageEntity> =
         messageDao.getUnreadMessages(chatId)
 
     override suspend fun insertMessage(message: MessageEntity) =
@@ -30,7 +30,7 @@ class MessageLocalDataSourceImpl @Inject constructor(
     override suspend fun deleteMessage(message: MessageEntity) =
         messageDao.deleteMessage(message)
 
-    override suspend fun markMessagesAsRead(chatId: Int) =
+    override suspend fun markMessagesAsRead(chatId: Long) =
         messageDao.markMessagesAsRead(chatId)
 
 

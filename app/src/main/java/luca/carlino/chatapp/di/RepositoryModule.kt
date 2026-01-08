@@ -26,7 +26,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-   abstract fun provideMessageLocalDataSource(
+   abstract fun bindMessageRepository(
        impl: MessageRepositoryImpl
     ): MessageRepository
 }

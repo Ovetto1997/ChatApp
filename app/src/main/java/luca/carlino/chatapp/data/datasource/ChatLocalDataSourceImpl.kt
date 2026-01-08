@@ -15,11 +15,7 @@ class ChatLocalDataSourceImpl @Inject constructor(
 
 
     override fun searchChats(query: String): Flow<List<ChatEntity>> =
-        if (query.isEmpty()) {
-            getAllChats()
-        } else {
-            chatDao.searchChats(query)
-        }
+        chatDao.searchChats(query)
 
     override suspend fun getChatById(chatId: Long): ChatEntity? =
         chatDao.getChatById(chatId)
