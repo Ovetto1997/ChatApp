@@ -1,13 +1,12 @@
 package luca.carlino.chatapp.data.dto
 
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+
 import luca.carlino.chatapp.data.db.entities.ChatEntity
 import luca.carlino.chatapp.domain.entities.Chat
+import javax.inject.Inject
 
 
-object ChatMapper {
+class ChatMapper @Inject constructor(){
 
 
     fun toDomain(entity: ChatEntity): Chat {

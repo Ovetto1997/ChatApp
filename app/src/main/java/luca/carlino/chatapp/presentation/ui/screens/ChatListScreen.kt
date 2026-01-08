@@ -36,10 +36,7 @@ import luca.carlino.chatapp.domain.entities.Chat
 import luca.carlino.chatapp.presentation.viewmodel.ChatListViewModel
 import luca.carlino.chatapp.presentation.uistate.ChatListUiState
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 
 
@@ -51,7 +48,6 @@ fun ChatListScreen(
     viewModel: ChatListViewModel = hiltViewModel(),
     onChatClick: (Chat) -> Unit
 ) {
-    val chats by viewModel.uiState.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -109,8 +105,18 @@ fun ChatListScreen(
 
 @Composable
 fun EmptyScreen(message: String, modifier: Modifier) {
-    TODO("Not yet implemented")
-}
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = message,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }}
 
 @Composable
 fun ChatItem(

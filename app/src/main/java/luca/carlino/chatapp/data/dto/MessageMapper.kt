@@ -2,9 +2,10 @@ package luca.carlino.chatapp.data.dto
 
 import luca.carlino.chatapp.data.db.entities.MessageEntity
 import luca.carlino.chatapp.domain.entities.Message
+import javax.inject.Inject
 
 
-object MessageMapper {
+class MessageMapper @Inject constructor(){
     fun toDomain(entity: MessageEntity): Message {
         return Message(
             chatId = entity.chatId,

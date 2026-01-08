@@ -7,7 +7,7 @@ interface MessageLocalDataSource {
 
     fun getMessagesByChatId(chatId: Long): Flow<List<MessageEntity>>
 
-    suspend fun getUnreadMessages(chatId: Int): List<MessageEntity>
+    suspend fun getUnreadMessages(chatId: Long): List<MessageEntity>
 
     suspend fun insertMessage(message: MessageEntity)
 

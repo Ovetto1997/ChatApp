@@ -7,7 +7,7 @@ import luca.carlino.chatapp.domain.entities.Message
 interface MessageRepository {
     fun getMessagesByChatId(chatId: Long): Flow<List<Message>>
 
-    suspend fun getUnreadMessages(chatId: Int): List<Message>
+    suspend fun getUnreadMessages(chatId: Long): List<Message>
 
     suspend fun insertMessage(message: Message)
 

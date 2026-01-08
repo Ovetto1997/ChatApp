@@ -17,11 +17,8 @@ class MessageRepositoryImpl @Inject constructor (
     override fun getMessagesByChatId(chatId: Long): Flow<List<Message>> =
         localDataSource.getMessagesByChatId(chatId).map { messageMapper.toDomainList(it) }
 
-
-
-    override suspend fun getUnreadMessages(chatId: Int): List<Message> =
+    override suspend fun getUnreadMessages(chatId: Long): List<Message> =
         localDataSource.getUnreadMessages(chatId).let { messageMapper.toDomainList(it) }
-
 
 
     override suspend fun insertMessage(message: Message) =

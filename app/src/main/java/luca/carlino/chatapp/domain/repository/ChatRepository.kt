@@ -2,7 +2,6 @@ package luca.carlino.chatapp.domain.repository
 
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.serialization.Contextual
 import luca.carlino.chatapp.domain.entities.Chat
 
 

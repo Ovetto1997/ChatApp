@@ -11,8 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import luca.carlino.chatapp.domain.entities.Chat
 import luca.carlino.chatapp.domain.entities.Message
-import luca.carlino.chatapp.domain.repository.ChatRepository
-import luca.carlino.chatapp.domain.repository.MessageRepository
 import luca.carlino.chatapp.domain.usecases.GetChatByIdUseCase
 import luca.carlino.chatapp.domain.usecases.MarkMessagesAsReadUseCase
 import luca.carlino.chatapp.domain.usecases.ObserveMessageByChatIdUseCase
@@ -26,10 +24,11 @@ class ChatDetailViewModel @Inject constructor(
     private val observeMessagesByChatId: ObserveMessageByChatIdUseCase,
     private val markMessagesAsRead: MarkMessagesAsReadUseCase,
     private val sendMessageUseCase: SendMessageUseCase,
+
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val chatId: Long = savedStateHandle.get<Long>("chatId") ?: -1
+    private val chatId: Long = savedStateHandle.get<Long>("chatId") ?: -1L
 
     private val _chat = MutableStateFlow<Chat?>(null)
     val chat: StateFlow<Chat?> = _chat.asStateFlow()
@@ -62,24 +61,22 @@ class ChatDetailViewModel @Inject constructor(
                 _uiState.value = ChatDetailUiState.Loading
                 val chat = getChatById(chatId)
                 _chat.value = chat
-
                 if (chat != null) {
                     _uiState.value = ChatDetailUiState.Success
                     markMessagesAsRead(chatId)
                 } else {
-
                     _uiState.value = ChatDetailUiState.Error("Chat not Found")
-
                 }
             } catch (e: Exception) {
                 _uiState.value = ChatDetailUiState.Error(e.message ?: "Unknow error")
             }
         }
     }
+    
     fun sendMessage() {
         val text = _newMessageText.value
         if (text.isBlank() || chatId == -1L) return
-//
+
         viewModelScope.launch {
             try {
                 val message = Message(
@@ -93,13 +90,6 @@ class ChatDetailViewModel @Inject constructor(
                 )
 
                 sendMessageUseCase(message)
-
-                // Update chat's last message
-               updateChatLastMessage(
-                    chatId = chatId,
-                    lastMessage = message.text,
-                    timestamp = message.timestamp
-                )
 
                 _newMessageText.value = ""
             } catch (e : Exception) {
