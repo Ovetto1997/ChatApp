@@ -65,6 +65,8 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     implementation("io.coil-kt.coil3:coil-compose:3.3.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
+    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
     val room_version = "2.8.4"
     ksp("androidx.room:room-compiler:$room_version")   // aligned with room_version

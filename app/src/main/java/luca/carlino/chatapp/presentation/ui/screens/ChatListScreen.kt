@@ -130,7 +130,6 @@ fun ChatItem(
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Avatar
         AsyncImage(
             model = chat.imageUrl,
             contentDescription = chat.name,
@@ -142,7 +141,6 @@ fun ChatItem(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        // Chat Info
         Column(modifier = Modifier.weight(1f)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
