@@ -6,14 +6,15 @@ import kotlinx.coroutines.flow.map
 import luca.carlino.chatapp.data.datasource.abstraction.MessageLocalDataSource
 import luca.carlino.chatapp.data.dto.MessageMapper
 import luca.carlino.chatapp.domain.entities.Message
-import luca.carlino.chatapp.domain.repositories.MessageRepository
+import luca.carlino.chatapp.domain.repository.MessageRepository
+import javax.inject.Inject
 
 
-class MessageRepositoryImpl (
+class MessageRepositoryImpl @Inject constructor (
     private val localDataSource: MessageLocalDataSource,
     private val messageMapper: MessageMapper
 ) : MessageRepository{
-    override fun getMessagesByChatId(chatId: Int): Flow<List<Message>> =
+    override fun getMessagesByChatId(chatId: Long): Flow<List<Message>> =
         localDataSource.getMessagesByChatId(chatId).map { messageMapper.toDomainList(it) }
 
 
@@ -40,7 +41,7 @@ class MessageRepositoryImpl (
         localDataSource.deleteMessage(messageMapper.toEntity(message))
 
 
-    override suspend fun markMessagesAsRead(chatId: Int) =
+    override suspend fun markMessagesAsRead(chatId: Long) =
         localDataSource.markMessagesAsRead(chatId)
 
 }

@@ -1,73 +1,46 @@
 package luca.carlino.chatapp.presentation.viewmodel
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
-import luca.carlino.chatapp.domain.entities.Chat
-import luca.carlino.chatapp.domain.repositories.ChatRepository
+import kotlinx.coroutines.flow.*
 import luca.carlino.chatapp.presentation.uistate.ChatListUiState
+import luca.carlino.chatapp.domain.usecases.ObserveChatsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatListViewModel @Inject constructor(
-    private val getChatRepository: ChatRepository,
-    ) : ViewModel() {
+    private val observeChats: ObserveChatsUseCase
+) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
-    val searchQuery : StateFlow<String> = _searchQuery.asStateFlow()
-    private val _uiState = MutableStateFlow<ChatListUiState>(ChatListUiState.Loading)
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
-    val uiState: StateFlow<ChatListUiState> = _uiState.asStateFlow()
-
-    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val chats: StateFlow<List<Chat>> = searchQuery
-        .debounce(300)
-        .distinctUntilChanged()
-        .flatMapLatest { query ->
-            if (query.isEmpty()) {
-                getChatRepository.getAllChats()
-            } else {
-                getChatRepository.searchChats(query)
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+    val uiState: StateFlow<ChatListUiState> =
+        searchQuery
+            .debounce(250)
+            .distinctUntilChanged()
+            .flatMapLatest { query ->
+                observeChats(query)
+                    .map { chats ->
+                        when {
+                            chats.isEmpty() -> ChatListUiState.Empty("No chats found")
+                            else -> ChatListUiState.Success(chats)
+                        }
+                    }
+                    .onStart { emit(ChatListUiState.Loading) }
             }
-        }
-        .onEach { chats ->
-            _uiState.value = if (chats.isEmpty() && searchQuery.value.isNotEmpty()) {
-                ChatListUiState.Empty("No chats found")
-            } else if (chats.isEmpty()) {
-                ChatListUiState.Empty("No chats available")
-            } else {
-                ChatListUiState.Success
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = emptyList()
-        )
+            .catch { e -> emit(ChatListUiState.Error(e.message ?: "error")) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = ChatListUiState.Loading
+            )
 
     fun updateSearchQuery(query: String) {
         _searchQuery.value = query
     }
-
-    fun clearSearch() {
-        _searchQuery.value = ""
-    }
 }
-
-
-
-
-
-

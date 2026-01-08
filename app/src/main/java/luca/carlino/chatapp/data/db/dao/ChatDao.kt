@@ -35,10 +35,10 @@ interface ChatDao {
     fun searchChats(searchQuery: String): Flow<List<ChatEntity>>
 
     @Query("SELECT * FROM chats WHERE id = :chatId")
-    suspend fun getChatById(chatId: Int): ChatEntity?
+    suspend fun getChatById(chatId: Long): ChatEntity?
 
     @Query("SELECT * FROM chats WHERE id = :chatId")
-    fun observeChat(chatId: Int): Flow<ChatEntity?>
+    fun observeChat(chatId: Long): Flow<ChatEntity?>
 
     // Update operations
     @Update
@@ -50,7 +50,7 @@ interface ChatDao {
         WHERE id = :chatId
     """)
     suspend fun updateChatLastMessage(
-        chatId: Int,
+        chatId: Long,
         lastMessage: String,
         timestamp: Long
     )

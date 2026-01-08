@@ -6,10 +6,11 @@ import kotlinx.coroutines.flow.map
 import luca.carlino.chatapp.data.datasource.abstraction.ChatLocalDataSource
 import luca.carlino.chatapp.data.dto.ChatMapper
 import luca.carlino.chatapp.domain.entities.Chat
-import luca.carlino.chatapp.domain.repositories.ChatRepository
+import luca.carlino.chatapp.domain.repository.ChatRepository
+import javax.inject.Inject
 
 
-class ChatRepositoryImpl (
+class ChatRepositoryImpl @Inject constructor (
     private val localDataSource: ChatLocalDataSource,
     private val chatMapper: ChatMapper
 ) : ChatRepository {
@@ -22,11 +23,11 @@ class ChatRepositoryImpl (
         localDataSource.searchChats(query).map { chatMapper.toDomainList(it) }
 
 
-    override suspend fun getChatById(chatId: Int): Chat? =
+    override suspend fun getChatById(chatId: Long): Chat? =
         localDataSource.getChatById(chatId)?.let { chatMapper.toDomain(it) }
 
 
-    override fun observeChat(chatId: Int): Flow<Chat?> =
+    override fun observeChat(chatId: Long): Flow<Chat?> =
         localDataSource.observeChat(chatId).map { entity -> entity?.let { chatMapper.toDomain(it) } }
 
 
@@ -40,11 +41,7 @@ class ChatRepositoryImpl (
 
 
 
-    override suspend fun updateChatLastMessage(
-        chatId: Int,
-        lastMessage: String,
-        timestamp: Long
-    ) =
+    override suspend fun updateChatLastMessage(chatId: Long, lastMessage: String, timestamp: Long) =
         localDataSource.updateLastMessage(chatId, lastMessage, timestamp)
 
 

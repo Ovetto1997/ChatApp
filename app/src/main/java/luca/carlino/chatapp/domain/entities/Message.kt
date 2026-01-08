@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 data class Message(
-    val chatId: Int,
+    val chatId: Long,
     val senderName: String,
     val text: String,
     val timestamp: Long,

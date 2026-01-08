@@ -7,7 +7,8 @@ import luca.carlino.chatapp.data.db.entities.ChatEntity
 import javax.inject.Inject
 
 class ChatLocalDataSourceImpl @Inject constructor(
-    private val chatDao: ChatDao) : ChatLocalDataSource {
+    private val chatDao: ChatDao
+) : ChatLocalDataSource {
 
 
     override fun getAllChats(): Flow<List<ChatEntity>> = chatDao.getAllChats()
@@ -20,10 +21,10 @@ class ChatLocalDataSourceImpl @Inject constructor(
             chatDao.searchChats(query)
         }
 
-    override suspend fun getChatById(chatId: Int): ChatEntity? =
+    override suspend fun getChatById(chatId: Long): ChatEntity? =
         chatDao.getChatById(chatId)
 
-    override fun observeChat(chatId: Int): Flow<ChatEntity?> =
+    override fun observeChat(chatId: Long): Flow<ChatEntity?> =
         chatDao.observeChat(chatId)
 
     override suspend fun insertChat(chat: ChatEntity) =
@@ -33,7 +34,7 @@ class ChatLocalDataSourceImpl @Inject constructor(
         chatDao.updateChat(chat)
 
     override suspend fun updateLastMessage(
-        chatId: Int,
+        chatId: Long,
         lastMessage: String,
         timeStamp: Long
     ) = chatDao.updateChatLastMessage(chatId, lastMessage, timeStamp)

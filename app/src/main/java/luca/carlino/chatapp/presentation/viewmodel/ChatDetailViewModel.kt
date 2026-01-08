@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import luca.carlino.chatapp.domain.entities.Chat
 import luca.carlino.chatapp.domain.entities.Message
-import luca.carlino.chatapp.domain.repositories.ChatRepository
-import luca.carlino.chatapp.domain.repositories.MessageRepository
+import luca.carlino.chatapp.domain.repository.ChatRepository
+import luca.carlino.chatapp.domain.repository.MessageRepository
 import luca.carlino.chatapp.presentation.uistate.ChatDetailUiState
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ class ChatDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val chatId: Int = savedStateHandle.get<Int>("chatId") ?: -1
+    private val chatId: Long = savedStateHandle.get<Long>("chatId") ?: -1
 
     private val _chat = MutableStateFlow<Chat?>(null)
     val chat: StateFlow<Chat?> = _chat.asStateFlow()
@@ -72,7 +72,7 @@ class ChatDetailViewModel @Inject constructor(
         }
     }
     fun sendMessage() {
-        if (_newMessageText.value.isBlank() || chatId == -1) return
+        if (_newMessageText.value.isBlank() || chatId == (-1).toLong()) return
 //
         viewModelScope.launch {
             try {
@@ -96,8 +96,8 @@ class ChatDetailViewModel @Inject constructor(
                 )
 
                 _newMessageText.value = ""
-            } catch (e: Exception) {
-                _uiState.value = ChatDetailUiState.Error("Failed to send message")
+            } catch (e : Exception) {
+                _uiState.value = ChatDetailUiState.Error(e.message ?: "Failed to send message")
             }
         }
     }

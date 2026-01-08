@@ -41,9 +41,9 @@ import luca.carlino.chatapp.presentation.viewmodel.ChatDetailViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatDetailScreen(
+    modifier: Modifier = Modifier,
     viewModel: ChatDetailViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onBackClick: () -> Unit
 ) {
     val chat by viewModel.chat.collectAsState()
     val messages by viewModel.messages.collectAsState()

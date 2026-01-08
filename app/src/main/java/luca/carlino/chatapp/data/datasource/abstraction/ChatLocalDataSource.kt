@@ -10,14 +10,14 @@ interface ChatLocalDataSource {
 
     fun searchChats(query: String): Flow<List<ChatEntity>>
 
-    suspend fun getChatById(chatId: Int): ChatEntity?
-    fun observeChat(chatId: Int): Flow<ChatEntity?>
+    suspend fun getChatById(chatId: Long): ChatEntity?
+    fun observeChat(chatId: Long): Flow<ChatEntity?>
     suspend fun insertChat(chat: ChatEntity)
 
     suspend fun updateChat(chat: ChatEntity)
 
     suspend fun updateLastMessage(
-        chatId: Int,
+        chatId: Long,
         lastMessage: String,
         timeStamp: Long
     )

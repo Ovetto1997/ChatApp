@@ -1,0 +1,16 @@
+package luca.carlino.chatapp.domain.usecases
+
+
+import kotlinx.coroutines.flow.Flow
+import luca.carlino.chatapp.domain.entities.Chat
+import luca.carlino.chatapp.domain.repository.ChatRepository
+import javax.inject.Inject
+
+class ObserveChatsUseCase @Inject constructor(
+    private val repository: ChatRepository
+) {
+    operator fun invoke(query: String): Flow<List<Chat>> {
+        return if (query.isBlank()) repository.getAllChats()
+        else repository.searchChats(query)
+    }
+}
