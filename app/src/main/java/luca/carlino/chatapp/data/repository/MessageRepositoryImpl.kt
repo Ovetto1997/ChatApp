@@ -2,7 +2,8 @@ package luca.carlino.chatapp.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import luca.carlino.chatapp.data.datasource.MessageLocalDataSource
+
+import luca.carlino.chatapp.data.datasource.abstraction.MessageLocalDataSource
 import luca.carlino.chatapp.data.dto.MessageMapper
 import luca.carlino.chatapp.domain.entities.Message
 import luca.carlino.chatapp.domain.repositories.MessageRepository

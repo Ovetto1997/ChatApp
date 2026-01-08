@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import luca.carlino.chatapp.data.datasource.ChatLocalDataSource
-import luca.carlino.chatapp.data.datasource.MessageLocalDataSource
+import luca.carlino.chatapp.data.datasource.ChatLocalDataSourceImpl
+import luca.carlino.chatapp.data.datasource.MessageLocalDataSourceImpl
 import luca.carlino.chatapp.data.db.dao.ChatDao
 import luca.carlino.chatapp.data.db.dao.MessageDao
 import javax.inject.Singleton
@@ -18,12 +18,12 @@ object DataSourceModule {
     @Singleton
     fun provideChatLocalDataSource(
         chatDao: ChatDao
-    ): ChatLocalDataSource = ChatLocalDataSource(chatDao)
+    ): ChatLocalDataSourceImpl = ChatLocalDataSourceImpl(chatDao)
 
 
     @Provides
     @Singleton
     fun provideMessageLocalDataSource(
         messageDao: MessageDao
-    ): MessageLocalDataSource = MessageLocalDataSource(messageDao)
+    ): MessageLocalDataSourceImpl = MessageLocalDataSourceImpl(messageDao)
 }

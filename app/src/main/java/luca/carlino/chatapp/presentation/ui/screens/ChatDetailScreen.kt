@@ -51,7 +51,7 @@ fun ChatDetailScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     Column(modifier = modifier.fillMaxSize()) {
-        // Top App Bar
+
         TopAppBar(
             title = { chat?.let { Text(it.name) } ?: Text("Chat") },
             navigationIcon = {

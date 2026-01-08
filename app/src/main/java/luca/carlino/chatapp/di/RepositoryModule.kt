@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import luca.carlino.chatapp.data.datasource.ChatLocalDataSource
-import luca.carlino.chatapp.data.datasource.MessageLocalDataSource
+import luca.carlino.chatapp.data.datasource.ChatLocalDataSourceImpl
+import luca.carlino.chatapp.data.datasource.MessageLocalDataSourceImpl
 import luca.carlino.chatapp.data.dto.ChatMapper
 import luca.carlino.chatapp.data.dto.MessageMapper
 import luca.carlino.chatapp.data.repository.ChatRepositoryImpl
@@ -21,7 +21,7 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideChatRepository(
-        localDataSource: ChatLocalDataSource
+        localDataSource: ChatLocalDataSourceImpl
     ): ChatRepository = ChatRepositoryImpl(
         localDataSource = localDataSource,
         chatMapper = ChatMapper
@@ -30,7 +30,7 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideMessageLocalDataSource(
-        localDataSource: MessageLocalDataSource
+        localDataSource: MessageLocalDataSourceImpl
     ): MessageRepository = MessageRepositoryImpl(
         localDataSource = localDataSource,
         messageMapper = MessageMapper
