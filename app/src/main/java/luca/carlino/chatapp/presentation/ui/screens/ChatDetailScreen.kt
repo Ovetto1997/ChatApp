@@ -62,7 +62,6 @@ fun ChatDetailScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Content
         when (uiState) {
             is ChatDetailUiState.Loading -> {
                 LoadingScreen(modifier = Modifier
@@ -78,7 +77,7 @@ fun ChatDetailScreen(
                 )
             }
             else -> {
-                // Messages List
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -96,7 +95,7 @@ fun ChatDetailScreen(
                     }
                 }
 
-                // Message Input
+
                 MessageInput(
                     text = newMessageText,
                     onTextChange = viewModel::updateMessageText,

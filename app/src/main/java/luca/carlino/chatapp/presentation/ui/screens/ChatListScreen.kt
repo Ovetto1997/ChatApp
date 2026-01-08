@@ -40,7 +40,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 
 
-// feature/chat_list/presentation/ChatListScreen.kt
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatListScreen(
@@ -58,7 +58,7 @@ fun ChatListScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Search Bar
+
         SearchBar(
             query = searchQuery,
             onQueryChange = viewModel::updateSearchQuery,
@@ -73,7 +73,7 @@ fun ChatListScreen(
             content = {}
         )
 
-        // Content
+
         when (val state = uiState) {
             is ChatListUiState.Loading -> LoadingScreen(Modifier.fillMaxSize())
 
