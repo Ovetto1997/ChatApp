@@ -34,9 +34,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import luca.carlino.chatapp.domain.entities.Chat
 import luca.carlino.chatapp.presentation.viewmodel.ChatListViewModel
-import androidx.hilt.navigation.compose.hiltViewModel
 import luca.carlino.chatapp.presentation.uistate.ChatListUiState
 import androidx.compose.material3.HorizontalDivider
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 
 
@@ -44,11 +44,10 @@ import coil3.compose.AsyncImage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatListScreen(
+    modifier: Modifier = Modifier,
     viewModel: ChatListViewModel = hiltViewModel(),
-    onChatClick: (Chat) -> Unit,
-    modifier: Modifier = Modifier
+    onChatClick: (Chat) -> Unit
 ) {
-    val chats by viewModel.chats.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -63,37 +62,30 @@ fun ChatListScreen(
         SearchBar(
             query = searchQuery,
             onQueryChange = viewModel::updateSearchQuery,
-            onSearch = {}, // Added onSearch parameter
-            active = false, // Assuming it's not active by default
-            onActiveChange = {}, // Assuming no specific active change handling for now
+            onSearch = {},
+            active = false,
+            onActiveChange = {},
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            placeholder = { Text("Search chats...") }, // Added placeholder
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") }, // Added leadingIcon
-            content = {} // Added content lambda
+            placeholder = { Text("Search chats...") },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+            content = {}
         )
 
         // Content
-        when (uiState) {
-            is ChatListUiState.Loading -> {
-                LoadingScreen(modifier = Modifier.fillMaxSize())
-            }
+        when (val state = uiState) {
+            is ChatListUiState.Loading -> LoadingScreen(Modifier.fillMaxSize())
+
             is ChatListUiState.Empty -> {
                 EmptyScreen(
-                    message = (uiState as ChatListUiState.Empty).message,
+                    message = state.message,
                     modifier = Modifier.fillMaxSize()
                 )
             }
             is ChatListUiState.Success -> {
-                if (chats.isEmpty()) {
-                    EmptyScreen(
-                        message = "No chats found",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        items(chats) { chat ->
+                        items(state.chats) { chat ->
                             ChatItem(
                                 chat = chat,
                                 onClick = { onChatClick(chat) },
@@ -103,21 +95,28 @@ fun ChatListScreen(
                         }
                     }
                 }
-            }
-            is ChatListUiState.Error -> {
-                ErrorScreen(
-                    message = (uiState as ChatListUiState.Error).message,
-                    modifier = Modifier.fillMaxSize()
-                )
+            is ChatListUiState.Error -> ErrorScreen(
+                message = state.message,
+                modifier = Modifier.fillMaxSize()
+            )
             }
         }
     }
-}
 
 @Composable
 fun EmptyScreen(message: String, modifier: Modifier) {
-    TODO("Not yet implemented")
-}
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = message,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }}
 
 @Composable
 fun ChatItem(

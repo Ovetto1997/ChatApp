@@ -30,4 +30,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ChatApp"
 include(":app")
- 
+include(":app:core")

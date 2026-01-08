@@ -24,14 +24,14 @@ interface MessageDao {
         WHERE chat_id = :chatId 
         ORDER BY timestamp ASC
     """)
-    fun getMessagesByChatId(chatId: Int): Flow<List<MessageEntity>>
+    fun getMessagesByChatId(chatId: Long): Flow<List<MessageEntity>>
 
     @Query("""
         SELECT * FROM messages 
         WHERE chat_id = :chatId 
         AND is_read = 0
     """)
-    suspend fun getUnreadMessages(chatId: Int): List<MessageEntity>
+    suspend fun getUnreadMessages(chatId: Long): List<MessageEntity>
 
     @Query("""
         SELECT * FROM messages 
@@ -52,6 +52,6 @@ interface MessageDao {
         WHERE chat_id = :chatId
     """
     )
-    suspend fun markMessagesAsRead(chatId: Int)
+    suspend fun markMessagesAsRead(chatId: Long)
 }
 

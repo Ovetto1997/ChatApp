@@ -41,9 +41,9 @@ import luca.carlino.chatapp.presentation.viewmodel.ChatDetailViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatDetailScreen(
+    modifier: Modifier = Modifier,
     viewModel: ChatDetailViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onBackClick: () -> Unit
 ) {
     val chat by viewModel.chat.collectAsState()
     val messages by viewModel.messages.collectAsState()
@@ -51,7 +51,7 @@ fun ChatDetailScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     Column(modifier = modifier.fillMaxSize()) {
-        // Top App Bar
+
         TopAppBar(
             title = { chat?.let { Text(it.name) } ?: Text("Chat") },
             navigationIcon = {

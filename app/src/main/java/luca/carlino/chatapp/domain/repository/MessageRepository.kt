@@ -1,13 +1,13 @@
-package luca.carlino.chatapp.domain.repositories
+package luca.carlino.chatapp.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import luca.carlino.chatapp.domain.entities.Message
 
 
 interface MessageRepository {
-    fun getMessagesByChatId(chatId: Int): Flow<List<Message>>
+    fun getMessagesByChatId(chatId: Long): Flow<List<Message>>
 
-    suspend fun getUnreadMessages(chatId: Int): List<Message>
+    suspend fun getUnreadMessages(chatId: Long): List<Message>
 
     suspend fun insertMessage(message: Message)
 
@@ -17,5 +17,5 @@ interface MessageRepository {
 
     suspend fun deleteMessage(message: Message)
 
-    suspend fun markMessagesAsRead(chatId: Int)
+    suspend fun markMessagesAsRead(chatId: Long)
 }

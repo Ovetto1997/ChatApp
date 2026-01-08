@@ -1,4 +1,4 @@
-package luca.carlino.chatapp.domain.repositories
+package luca.carlino.chatapp.domain.repository
 
 
 import kotlinx.coroutines.flow.Flow
@@ -11,16 +11,16 @@ interface ChatRepository {
 
     fun searchChats(query: String): Flow<List<Chat>>
 
-    suspend fun getChatById(chatId: Int): Chat?
+    suspend fun getChatById(chatId: Long): Chat?
 
-    fun observeChat(chatId: Int): Flow<Chat?>
+    fun observeChat(chatId: Long): Flow<Chat?>
 
     suspend fun insertChat(chat: Chat)
 
     suspend fun updateChat(chat: Chat)
 
     suspend fun updateChatLastMessage(
-        chatId: Int,
+        chatId: Long,
         lastMessage: String,
         timestamp: Long
     )

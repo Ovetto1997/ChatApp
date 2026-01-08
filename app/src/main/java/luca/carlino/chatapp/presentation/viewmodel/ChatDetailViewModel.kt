@@ -11,19 +11,24 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import luca.carlino.chatapp.domain.entities.Chat
 import luca.carlino.chatapp.domain.entities.Message
-import luca.carlino.chatapp.domain.repositories.ChatRepository
-import luca.carlino.chatapp.domain.repositories.MessageRepository
+import luca.carlino.chatapp.domain.usecases.GetChatByIdUseCase
+import luca.carlino.chatapp.domain.usecases.MarkMessagesAsReadUseCase
+import luca.carlino.chatapp.domain.usecases.ObserveMessageByChatIdUseCase
+import luca.carlino.chatapp.domain.usecases.SendMessageUseCase
 import luca.carlino.chatapp.presentation.uistate.ChatDetailUiState
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatDetailViewModel @Inject constructor(
-    private val chatRepository: ChatRepository,
-    private val messageRepository: MessageRepository,
+    private val getChatById: GetChatByIdUseCase,
+    private val observeMessagesByChatId: ObserveMessageByChatIdUseCase,
+    private val markMessagesAsRead: MarkMessagesAsReadUseCase,
+    private val sendMessageUseCase: SendMessageUseCase,
+
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val chatId: Int = savedStateHandle.get<Int>("chatId") ?: -1
+    private val chatId: Long = savedStateHandle.get<Long>("chatId") ?: -1L
 
     private val _chat = MutableStateFlow<Chat?>(null)
     val chat: StateFlow<Chat?> = _chat.asStateFlow()
@@ -44,10 +49,9 @@ class ChatDetailViewModel @Inject constructor(
 
     private fun loadMessages() {
         viewModelScope.launch {
-            messageRepository.getMessagesByChatId(chatId)
-                .collect { messageList ->
-                    messageList.also { _messages.value = it }
-                }
+            observeMessagesByChatId(chatId).collect {
+                _messages.value = it
+            }
         }
     }
 
@@ -55,25 +59,24 @@ class ChatDetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _uiState.value = ChatDetailUiState.Loading
-                val chat = chatRepository.getChatById(chatId)
+                val chat = getChatById(chatId)
                 _chat.value = chat
-
                 if (chat != null) {
                     _uiState.value = ChatDetailUiState.Success
-                    messageRepository.markMessagesAsRead(chatId)
+                    markMessagesAsRead(chatId)
                 } else {
-
                     _uiState.value = ChatDetailUiState.Error("Chat not Found")
-
                 }
             } catch (e: Exception) {
                 _uiState.value = ChatDetailUiState.Error(e.message ?: "Unknow error")
             }
         }
     }
+    
     fun sendMessage() {
-        if (_newMessageText.value.isBlank() || chatId == -1) return
-//
+        val text = _newMessageText.value
+        if (text.isBlank() || chatId == -1L) return
+
         viewModelScope.launch {
             try {
                 val message = Message(
@@ -86,18 +89,11 @@ class ChatDetailViewModel @Inject constructor(
 
                 )
 
-                messageRepository.insertMessage(message)
-
-                // Update chat's last message
-                chatRepository.updateChatLastMessage(
-                    chatId = chatId,
-                    lastMessage = message.text,
-                    timestamp = message.timestamp
-                )
+                sendMessageUseCase(message)
 
                 _newMessageText.value = ""
-            } catch (e: Exception) {
-                _uiState.value = ChatDetailUiState.Error("Failed to send message")
+            } catch (e : Exception) {
+                _uiState.value = ChatDetailUiState.Error(e.message ?: "Failed to send message")
             }
         }
     }

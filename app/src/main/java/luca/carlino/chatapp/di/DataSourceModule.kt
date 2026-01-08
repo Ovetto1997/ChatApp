@@ -1,29 +1,32 @@
 package luca.carlino.chatapp.di
 
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
+
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import luca.carlino.chatapp.data.datasource.ChatLocalDataSource
-import luca.carlino.chatapp.data.datasource.MessageLocalDataSource
-import luca.carlino.chatapp.data.db.dao.ChatDao
-import luca.carlino.chatapp.data.db.dao.MessageDao
+import luca.carlino.chatapp.data.datasource.ChatLocalDataSourceImpl
+
+import luca.carlino.chatapp.data.datasource.MessageLocalDataSourceImpl
+import luca.carlino.chatapp.data.datasource.abstraction.ChatLocalDataSource
+import luca.carlino.chatapp.data.datasource.abstraction.MessageLocalDataSource
+
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataSourceModule {
+abstract class DataSourceModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideChatLocalDataSource(
-        chatDao: ChatDao
-    ): ChatLocalDataSource = ChatLocalDataSource(chatDao)
+    abstract fun provideChatLocalDataSource(
+        impl: ChatLocalDataSourceImpl
+    ): ChatLocalDataSource
 
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideMessageLocalDataSource(
-        messageDao: MessageDao
-    ): MessageLocalDataSource = MessageLocalDataSource(messageDao)
+    abstract fun provideMessageLocalDataSource(
+       impl: MessageLocalDataSourceImpl
+    ): MessageLocalDataSource
 }
