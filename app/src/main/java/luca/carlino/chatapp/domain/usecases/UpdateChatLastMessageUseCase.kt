@@ -1,6 +1,6 @@
 package luca.carlino.chatapp.domain.usecases
 
-import luca.carlino.chatapp.domain.repository.ChatRepository
+import luca.carlino.chatapp.data.repository.abstraction.ChatRepository
 import javax.inject.Inject
 
 class UpdateChatLastMessageUseCase @Inject constructor(

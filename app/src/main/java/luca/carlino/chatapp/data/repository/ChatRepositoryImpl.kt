@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.map
 import luca.carlino.chatapp.data.datasource.abstraction.ChatLocalDataSource
 import luca.carlino.chatapp.data.dto.ChatMapper
 import luca.carlino.chatapp.domain.entities.Chat
-import luca.carlino.chatapp.domain.repository.ChatRepository
+import luca.carlino.chatapp.data.repository.abstraction.ChatRepository
 import javax.inject.Inject
 
 

@@ -2,14 +2,13 @@ package luca.carlino.chatapp.di
 
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 import luca.carlino.chatapp.data.repository.ChatRepositoryImpl
 import luca.carlino.chatapp.data.repository.MessageRepositoryImpl
-import luca.carlino.chatapp.domain.repository.ChatRepository
-import luca.carlino.chatapp.domain.repository.MessageRepository
+import luca.carlino.chatapp.data.repository.abstraction.ChatRepository
+import luca.carlino.chatapp.data.repository.abstraction.MessageRepository
 import javax.inject.Singleton
 
 @Module

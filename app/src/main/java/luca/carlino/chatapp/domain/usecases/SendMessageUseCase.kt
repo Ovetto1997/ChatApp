@@ -1,8 +1,8 @@
 package luca.carlino.chatapp.domain.usecases
 
 import luca.carlino.chatapp.domain.entities.Message
-import luca.carlino.chatapp.domain.repository.ChatRepository
-import luca.carlino.chatapp.domain.repository.MessageRepository
+import luca.carlino.chatapp.data.repository.abstraction.ChatRepository
+import luca.carlino.chatapp.data.repository.abstraction.MessageRepository
 import javax.inject.Inject
 
 class SendMessageUseCase @Inject constructor(

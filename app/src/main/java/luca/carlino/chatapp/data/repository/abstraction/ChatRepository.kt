@@ -1,4 +1,4 @@
-package luca.carlino.chatapp.domain.repository
+package luca.carlino.chatapp.data.repository.abstraction
 
 
 import kotlinx.coroutines.flow.Flow

@@ -3,7 +3,7 @@ package luca.carlino.chatapp.domain.usecases
 
 import kotlinx.coroutines.flow.Flow
 import luca.carlino.chatapp.domain.entities.Chat
-import luca.carlino.chatapp.domain.repository.ChatRepository
+import luca.carlino.chatapp.data.repository.abstraction.ChatRepository
 import javax.inject.Inject
 
 class ObserveChatsUseCase @Inject constructor(
