@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import luca.carlino.chatapp.core.Resource
 import luca.carlino.chatapp.presentation.uistate.ChatListUiState
 import luca.carlino.chatapp.domain.usecases.ObserveChatsUseCase
 import javax.inject.Inject
@@ -24,16 +25,29 @@ class ChatListViewModel @Inject constructor(
             .debounce(250)
             .distinctUntilChanged()
             .flatMapLatest { query ->
-                observeChats(query)
-                    .map { chats ->
-                        when {
-                            chats.isEmpty() -> ChatListUiState.Empty("No chats found")
-                            else -> ChatListUiState.Success(chats)
+                observeChats(query).map { resource ->
+                    when (resource) {
+                        is Resource.Loading -> {
+                            ChatListUiState.Loading
                         }
+
+                        is Resource.Error -> {
+                            ChatListUiState.Error(resource.message)
+                        }
+
+                        is Resource.Success -> {
+                            val chats = resource.data
+                            if (chats.isEmpty()) {
+                                ChatListUiState.Empty("No chats found")
+                            } else {
+                                ChatListUiState.Success(chats)
+                            }
+                        }
+
                     }
-                    .onStart { emit(ChatListUiState.Loading) }
+                }
+
             }
-            .catch { e -> emit(ChatListUiState.Error(e.message ?: "error")) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
