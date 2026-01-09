@@ -52,7 +52,7 @@ fun ChatListScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     Column(modifier = modifier.fillMaxSize()) {
-        // Top App Bar
+
         TopAppBar(
             title = { Text("Chats") },
             modifier = Modifier.fillMaxWidth()
