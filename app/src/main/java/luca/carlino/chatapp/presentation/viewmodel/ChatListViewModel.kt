@@ -30,11 +30,9 @@ class ChatListViewModel @Inject constructor(
                         is Resource.Loading -> {
                             ChatListUiState.Loading
                         }
-
                         is Resource.Error -> {
                             ChatListUiState.Error(resource.message)
                         }
-
                         is Resource.Success -> {
                             val chats = resource.data
                             if (chats.isEmpty()) {

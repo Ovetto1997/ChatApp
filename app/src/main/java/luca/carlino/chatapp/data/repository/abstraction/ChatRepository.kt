@@ -2,14 +2,15 @@ package luca.carlino.chatapp.data.repository.abstraction
 
 
 import kotlinx.coroutines.flow.Flow
+import luca.carlino.chatapp.core.Resource
 import luca.carlino.chatapp.domain.entities.Chat
 
 
 interface ChatRepository {
 
-    fun getAllChats(): Flow<List<Chat>>
+    fun getAllChats(): Flow<Resource<List<Chat>>>
 
-    fun searchChats(query: String): Flow<List<Chat>>
+    fun searchChats(query: String): Flow<Resource<List<Chat>>>
 
     suspend fun getChatById(chatId: Long): Chat?
 

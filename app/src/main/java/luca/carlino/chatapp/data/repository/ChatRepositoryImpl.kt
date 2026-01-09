@@ -2,6 +2,8 @@ package luca.carlino.chatapp.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import luca.carlino.chatapp.core.Resource
+import luca.carlino.chatapp.core.asResource
 
 import luca.carlino.chatapp.data.datasource.abstraction.ChatLocalDataSource
 import luca.carlino.chatapp.data.dto.ChatMapper
@@ -15,12 +17,12 @@ class ChatRepositoryImpl @Inject constructor (
     private val chatMapper: ChatMapper
 ) : ChatRepository {
 
-    override fun getAllChats() =
-        localDataSource.getAllChats().map { chatMapper.toDomainList(it) }
+    override fun getAllChats() : Flow<Resource<List<Chat>>> =
+        localDataSource.getAllChats().map { chatMapper.toDomainList(it) }.asResource()
 
 
-    override fun searchChats(query: String): Flow<List<Chat>> =
-        localDataSource.searchChats(query).map { chatMapper.toDomainList(it) }
+    override fun searchChats(query: String): Flow<Resource<List<Chat>>> =
+        localDataSource.searchChats(query).map { chatMapper.toDomainList(it) }.asResource()
 
 
     override suspend fun getChatById(chatId: Long): Chat? =
