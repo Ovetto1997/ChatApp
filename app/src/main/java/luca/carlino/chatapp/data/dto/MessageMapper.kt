@@ -32,3 +32,9 @@ class MessageMapper @Inject constructor(){
         return entities.map { toDomain(it) }
     }
 }
+
+//i mapper sono necessari, in genere quando i dati arrivano da un servizio usiamo il dto per la rispodts del servizio,
+//usare una classe nel modulo data nel dominio anche se non viene utilizzata se bisogna processare un merge di dati presenti nel dat calss del servizio
+//esterno possiamo fare un ma
+//moduli indipendenti
+//potevo farla in  un altro modo: usarlo dentro SendMessaageUseCase,

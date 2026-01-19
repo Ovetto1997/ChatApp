@@ -30,3 +30,5 @@ object DataBaseModule {
     fun provideMessageDao(database: AppDatabase): MessageDao =
         database.messageDao()
 }
+
+//provide

@@ -95,7 +95,6 @@ fun ChatDetailScreen(
                     }
                 }
 
-
                 MessageInput(
                     text = newMessageText,
                     onTextChange = viewModel::updateMessageText,

@@ -63,6 +63,9 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation("org.mockito:mockito-core:5.20.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+
 
     implementation("io.coil-kt.coil3:coil-compose:3.3.0")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
@@ -78,5 +81,10 @@ dependencies {
 
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:${room_version}")
+    // Source: https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-test
+    runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+
+
+
 
 }

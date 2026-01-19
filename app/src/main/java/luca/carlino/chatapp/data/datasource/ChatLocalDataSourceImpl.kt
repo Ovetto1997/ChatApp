@@ -13,7 +13,6 @@ class ChatLocalDataSourceImpl @Inject constructor(
 
     override fun getAllChats(): Flow<List<ChatEntity>> = chatDao.getAllChats()
 
-
     override fun searchChats(query: String): Flow<List<ChatEntity>> =
         chatDao.searchChats(query)
 

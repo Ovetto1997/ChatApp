@@ -22,7 +22,8 @@ abstract class RepositoryModule {
     ) : ChatRepository
 
 
-
+//binds quando instazio una classe completa della interfaccia che non mi servono pqrametri injetctati
+    // quando classe
     @Binds
     @Singleton
    abstract fun bindMessageRepository(
