@@ -82,7 +82,9 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:${room_version}")
     // Source: https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-test
-    runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+    testImplementation("junit:junit:4.13.2")
 
 
 
