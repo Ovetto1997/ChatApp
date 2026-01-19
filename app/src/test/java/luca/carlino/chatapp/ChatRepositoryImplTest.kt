@@ -88,7 +88,6 @@ class ChatRepositoryImplTest {
         whenever(localDataSource.getAllChats()).thenReturn(flowOf(emptyList()))
         whenever(chatMapper.toDomainList(emptyList())).thenReturn(emptyList())
 
-
         repository.getAllChats().test {
             val firstResult = awaitItem()
             if (firstResult is Resource.Loading) {
@@ -102,6 +101,33 @@ class ChatRepositoryImplTest {
             }
             awaitComplete()
         }
+    }
+
+    @Test
+    fun searchChats_returns_filtered_chats_matching_query() = runTest{
+        val query = "Test"
+        val entities = listOf(testChatEntity)
+        val domainChats = listOf(testChat)
+
+
+        whenever(localDataSource.searchChats(query)).thenReturn(flowOf(entities))
+        whenever(chatMapper.toDomainList(entities)).thenReturn(domainChats)
+
+        repository.searchChats(query).test {
+            val firstResult = awaitItem()
+            if (firstResult is Resource.Loading) {
+                val successResult = awaitItem()
+                assert(successResult is Resource.Success)
+                assertEquals(domainChats, (successResult as Resource.Success).data)
+            } else {
+                assert(firstResult is Resource.Success)
+                assertEquals(domainChats, (firstResult as Resource.Success).data)
+            }
+            awaitComplete()
+        }
+
+        verify(localDataSource).searchChats(query)
+        verify(chatMapper).toDomainList(entities)
 
 
     }
