@@ -2,6 +2,7 @@ package luca.carlino.chatapp
 
 import app.cash.turbine.test
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import luca.carlino.chatapp.core.Resource
@@ -132,6 +133,84 @@ class ChatRepositoryImplTest {
 
     }
 
+    @Test
+    fun getChatById_returns_chat_when_found() = runTest{
+        val id = 1L
+        whenever(localDataSource.getChatById(id)).thenReturn(testChatEntity)
+        whenever(chatMapper.toDomain(testChatEntity)).thenReturn(testChat)
+
+        val result = repository.getChatById(id)
+
+        assertEquals(testChat, result)
+        verify(localDataSource).getChatById(id)
+
+    }
+
+
+    @Test
+    fun getChatById_returns_null_when_chat_not_found() = runTest {
+        val id = 999L
+        whenever(localDataSource.getChatById(id)).thenReturn(null)
+
+        val result = repository.getChatById(id)
+
+        assertNull(result)
+        verify(localDataSource).getChatById(id)
+    }
+
+    @Test
+    fun observeChat_emits_chat_updates() = runTest {
+        val id = 1L
+        whenever(localDataSource.observeChat(id)).thenReturn(flowOf(testChatEntity))
+        whenever(chatMapper.toDomain(testChatEntity)).thenReturn(testChat)
+
+
+        repository.observeChat(id).test {
+            assertEquals(testChat, awaitItem())
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun observeChat_emits_null_when_chat_not_found()= runTest {
+        val id = 999L
+        whenever(localDataSource.observeChat(id)).thenReturn(flowOf(null))
+
+        repository.observeChat(id).test {
+            assertNull(awaitItem())
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun insertChat_calls_data_source_with_mapped_entity()= runTest {
+        whenever(chatMapper.toEntity(testChat)).thenReturn(testChatEntity)
+
+        repository.insertChat(testChat)
+
+        verify(localDataSource).insertChat(testChatEntity)
+        verify(chatMapper).toEntity(testChat)
+    }
+
+    @Test
+    fun updateChat_calls_data_source_with_mapped_entity()= runTest {
+        whenever(chatMapper.toEntity(testChat)).thenReturn(testChatEntity)
+
+        repository.updateChat(testChat)
+
+        verify(localDataSource).updateChat(testChatEntity)
+    }
+
+    @Test
+    fun updateChatLastMessage_clls_data_source_with_correct_parameters() = runTest {
+        val id = 1L
+        val lastMessage = "New message"
+        val timestamp = 2000L
+
+        repository.updateChatLastMessage(id, lastMessage, timestamp)
+        verify(localDataSource).updateLastMessage(id, lastMessage, timestamp)
+
+    }
 
 
 }
